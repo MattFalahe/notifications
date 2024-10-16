@@ -30,6 +30,7 @@ use Seat\Notifications\Services\Discord\Messages\DiscordEmbed;
 use Seat\Notifications\Services\Discord\Messages\DiscordEmbedField;
 use Seat\Notifications\Services\Discord\Messages\DiscordMessage;
 use Seat\Notifications\Traits\NotificationTools;
+use Illuminate\Support\Facades\DB;
 
 /**
  * Class StructureLostArmor.
@@ -73,17 +74,24 @@ class StructureLostArmor extends AbstractDiscordNotification
                 });
 
                 $embed->field(function (DiscordEmbedField $field) {
-                    $structure = UniverseStructure::find($this->notification->text['structureID']);
+                    // Fetch the structure directly from the database using DB facade
+                    $structure = DB::table('universe_structures')
+                                    ->where('structure_id', $this->notification->text['structureID'])
+                                    ->first();
+                    
+                    // Fetch the structure type
                     $type = InvType::find($this->notification->text['structureShowInfoData'][1]);
-                   
+                
+                    // Default title
                     $title = 'Structure';
-
-                    if (! is_null($structure)) {
+                
+                    // If structure exists, set the title to the structure's name
+                    if ($structure) {
                         $title = $structure->name;
                     }
-
+                
                     $field->name($title)
-                        ->value($type->typeName);
+                          ->value($type->typeName);
                 });
             })
             ->warning();
