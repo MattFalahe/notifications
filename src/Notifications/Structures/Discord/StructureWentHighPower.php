@@ -75,7 +75,7 @@ class StructureWentHighPower extends AbstractDiscordNotification
                 });
 
                 $embed->field(function (DiscordEmbedField $field) {
-                    $structure = UniverseStructure::find($this->notification->text['structureID']);
+                    $structure = UniverseStructure::find($this->notification->text['structure_id']);
                     
                     $type = InvType::find($this->notification->text['structureShowInfoData'][1]);
                    
