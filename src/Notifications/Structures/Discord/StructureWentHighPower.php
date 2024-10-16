@@ -73,24 +73,27 @@ class StructureWentHighPower extends AbstractDiscordNotification
                         );
                 });
 
-$embed->field(function (DiscordEmbedField $field) {
-    // Fetch the structure using the structureID from the notification
-    $structure = UniverseStructure::where('structure_id', $this->notification->text['structureID'])->first();
-    
-    // Fetch the structure type using the type ID from the notification
-    $type = InvType::find($this->notification->text['structureShowInfoData'][1]);
+use Illuminate\Support\Facades\DB;
 
-    // Set default title to 'Structure'
-    $title = 'Structure';
-
-    // If the structure is found, set the title to the structure's name
-    if ($structure) {
-        $title = $structure->name;
-    }
-
-    // Set the field's name and value (title and typeName)
-    $field->name($title)
-          ->value($type->typeName);
+                $embed->field(function (DiscordEmbedField $field) {
+                    // Fetch the structure directly from the database using DB facade
+                    $structure = DB::table('universe_structures')
+                                    ->where('structure_id', $this->notification->text['structureID'])
+                                    ->first();
+                    
+                    // Fetch the structure type
+                    $type = InvType::find($this->notification->text['structureShowInfoData'][1]);
+                
+                    // Default title
+                    $title = 'Structure';
+                
+                    // If structure exists, set the title to the structure's name
+                    if ($structure) {
+                        $title = $structure->name;
+                    }
+                
+                    $field->name($title)
+                          ->value($type->typeName);
                 });
             });
     }
