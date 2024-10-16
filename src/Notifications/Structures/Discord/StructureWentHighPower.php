@@ -30,7 +30,7 @@ use Seat\Notifications\Services\Discord\Messages\DiscordEmbed;
 use Seat\Notifications\Services\Discord\Messages\DiscordEmbedField;
 use Seat\Notifications\Services\Discord\Messages\DiscordMessage;
 use Seat\Notifications\Traits\NotificationTools;
-use Illuminate\Support\Facades\DB;
+use Seat\Eveapi\Models\Universe\UniverseStructure;
 
 /**
  * Class StructureWentHighPower.
@@ -75,24 +75,18 @@ class StructureWentHighPower extends AbstractDiscordNotification
                 });
 
                 $embed->field(function (DiscordEmbedField $field) {
-                    // Fetch the structure directly from the database using DB facade
-                    $structure = DB::table('universe_structures')
-                                    ->where('structure_id', $this->notification->text['structureID'])
-                                    ->first();
+                    $structure = UniverseStructure::find($this->notification->text['structureID']);
                     
-                    // Fetch the structure type
                     $type = InvType::find($this->notification->text['structureShowInfoData'][1]);
-                
-                    // Default title
+                   
                     $title = 'Structure';
-                
-                    // If structure exists, set the title to the structure's name
-                    if ($structure) {
+
+                    if (! is_null($structure)) {
                         $title = $structure->name;
                     }
-                
-                    $field->name($title)
-                          ->value($type->typeName);
+
+                    $field->name('Structure')
+                        ->value($this->zKillBoardToDiscordLink('ship', $type->typeID, $type->typeName));
                 });
             });
     }
