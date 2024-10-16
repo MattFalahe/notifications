@@ -30,6 +30,7 @@ use Seat\Notifications\Services\Discord\Messages\DiscordEmbed;
 use Seat\Notifications\Services\Discord\Messages\DiscordEmbedField;
 use Seat\Notifications\Services\Discord\Messages\DiscordMessage;
 use Seat\Notifications\Traits\NotificationTools;
+use Illuminate\Support\Facades\DB;
 
 /**
  * Class StructureWentHighPower.
@@ -72,8 +73,6 @@ class StructureWentHighPower extends AbstractDiscordNotification
                             )
                         );
                 });
-
-use Illuminate\Support\Facades\DB;
 
                 $embed->field(function (DiscordEmbedField $field) {
                     // Fetch the structure directly from the database using DB facade
