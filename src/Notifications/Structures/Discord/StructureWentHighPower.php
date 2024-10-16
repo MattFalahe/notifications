@@ -75,7 +75,7 @@ class StructureWentHighPower extends AbstractDiscordNotification
                 });
 
                 $embed->field(function (DiscordEmbedField $field) {
-                    $structure = UniverseStructure::find($this->notification->text['structure_id']);
+                    $structure = UniverseStructure::find($this->notification->text['structureID']);
                     
                     $type = InvType::find($this->notification->text['structureShowInfoData'][1]);
                    
@@ -85,7 +85,7 @@ class StructureWentHighPower extends AbstractDiscordNotification
                         $title = $structure->name;
                     }
 
-                    $field->name('Structure')
+                    $field->name($title)
                         ->value($this->zKillBoardToDiscordLink('ship', $type->typeID, $type->typeName));
                 });
             });
