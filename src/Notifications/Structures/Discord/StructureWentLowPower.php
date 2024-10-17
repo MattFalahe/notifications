@@ -78,9 +78,10 @@ class StructureWentLowPower extends AbstractDiscordNotification
                     // If the structure ID exists in the notification, retrieve it from the UniverseStructure model.
                     $structure = UniverseStructure::find($this->notification->text['structureID']);
 
-                    // Retrieve the structure's type information using the structureShowInfoData from the notification.
-                    // The second index ([1]) contains the type ID which is used to look up the structure type from the InvType model.
-                    $type = InvType::find($this->notification->text['structureShowInfoData'][1]);
+                    $type = InvType::firstOrNew(
+                        ['typeID' => $this->notification->text['structureTypeID']],
+                        ['typeName' => trans('web::seat.unknown')]
+                    );
 
                     // Initialize a default title for the structure field as 'Structure'.
                     $title = 'Structure';
