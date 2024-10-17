@@ -30,7 +30,6 @@ use Seat\Notifications\Services\Discord\Messages\DiscordEmbed;
 use Seat\Notifications\Services\Discord\Messages\DiscordEmbedField;
 use Seat\Notifications\Services\Discord\Messages\DiscordMessage;
 use Seat\Notifications\Traits\NotificationTools;
-use Seat\Eveapi\Models\Universe\UniverseStructure;
 
 /**
  * Class StructureWentLowPower.
