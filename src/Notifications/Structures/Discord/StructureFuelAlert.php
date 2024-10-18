@@ -77,22 +77,20 @@ class StructureFuelAlert extends AbstractDiscordNotification
 
                     // Retrieve the structure's type information using the structureShowInfoData from the notification.
                     // The second index ([1]) contains the type ID which is used to look up the structure type from the InvType model.
-                    $type = InvType::find($this->notification->text['structureShowInfoData'][1] ?? null);
+                    $type = InvType::find($this->notification->text['structureShowInfoData'][1]);
 
                     // Initialize a default title for the structure field as 'Structure'.
                     $title = 'Structure';
                     
                     // If a structure is found (i.e., it's not null), set the title to the name of the structure.
-                    if ($structure && !is_null($structure->name)) {
+                    if (! is_null($structure)) {
                         $title = $structure->name;
                     }
 
                     // Set the field's name to the title (either 'Structure' or the structure's actual name).
                     // Set the field's value to a zKillboard link, formatted for Discord. This uses the structure's type ID and name.
-                    $value = $type ? $this->zKillBoardToDiscordLink('ship', $type->typeID, $type->typeName) : 'Unknown';
-
                     $field->name($title)
-                        ->value($value);
+                        ->value($this->zKillBoardToDiscordLink('ship', $type->typeID, $type->typeName));
                 });
             })
             ->embed(function (DiscordEmbed $embed) {
